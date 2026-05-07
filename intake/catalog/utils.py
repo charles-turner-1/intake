@@ -169,8 +169,11 @@ def expand_defaults(default, client=False, getenv=True, getshell=False):
             default = subprocess.check_output(cmd).rstrip().decode("utf8")
         except (subprocess.CalledProcessError, OSError):
             default = ""
-    else:
+    elif not getshell:
         warnings.warn("Shell command not executed due to getshell=False")
+    else:
+        raise RuntimeError("Unexpected & potentially invalid state reached.")
+
     r = re.match(r"client_shell\((.*)\)", default)
     if r and client and getshell:
         try:
@@ -178,8 +181,10 @@ def expand_defaults(default, client=False, getenv=True, getshell=False):
             default = subprocess.check_output(cmd).rstrip().decode("utf8")
         except (subprocess.CalledProcessError, OSError):
             default = ""
-    else:
+    elif not getshell:
         warnings.warn("Shell command not executed due to getshell=False")
+    else:
+        raise RuntimeError("Unexpected & potentially invalid state reached.")
     return default
 
 
